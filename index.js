@@ -3,10 +3,17 @@
  */
 var cloneDeep = require('lodash/fp/cloneDeep');
 
-module.exports = deep => store => next => action => {
-  if(deep){
-    return next(cloneDeep(action));
-  }else{
-    return next(Object.assign({},action));
+module.exports = function(deep){
+
+  return function(store){
+    return function(next){
+      return function(action){
+        if(deep){
+          return next(cloneDeep(action));
+        }else{
+          return next(Object.assign({},action));
+        }
+      }
+    }
   }
 };
